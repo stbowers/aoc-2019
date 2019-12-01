@@ -1,0 +1,12 @@
+[package]
+name = "aoc_utils"
+version = "0.1.0"
+authors = ["stbowers <sean.t.bowers@gmail.com>"]
+edition = "2018"
+
+[features]
+file_utils = []
+text_utils = ["text_io"]
+
+[dependencies]
+text_io = {version = "0.1.7", optional = true}
