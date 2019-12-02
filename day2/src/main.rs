@@ -6,27 +6,50 @@ fn sim(mut code: Vec<i32>, noun: i32, verb: i32) -> i32 {
     code[1] = noun;
     code[2] = verb;
 
-    for i in 0..(code.len() / 4) {
-        let ii = i * 4;
-	match code[ii] {
-    	    1 => {
-       	        let x1 = code[ii + 1] as usize;
-       	        let x2 = code[ii + 2] as usize;
-       	        let x3 = code[ii + 3] as usize;
-       	        code[x3] = code[x1] + code[x2];
-    	    },
-    	    2 => {
-       	        let x1 = code[ii + 1] as usize;
-       	        let x2 = code[ii + 2] as usize;
-       	        let x3 = code[ii + 3] as usize;
-       	        code[x3] = code[x1] * code[x2];
-    	    },
-            99 => { break; },
-            _ => {
-                println!("Unknown opcode: {}", code[ii]);
+    #[inline(always)]
+    fn add(code: &mut Vec<i32>, ip: usize) -> usize {
+        let a = code[ip + 1] as usize;
+        let b = code[ip + 2] as usize;
+        let c = code[ip + 3] as usize;
+
+        // Add *a + *b, store in *c
+        // println!("*{} = *{} + *{} = {} + {} = {}", c, a, b, code[a], code[b], code[a] + code[b]);
+        code[c] = code[a] + code[b];
+
+        return 4;
+    }
+
+    #[inline(always)]
+    fn mul(code: &mut Vec<i32>, ip: usize) -> usize {
+        let a = code[ip + 1] as usize;
+        let b = code[ip + 2] as usize;
+        let c = code[ip + 3] as usize;
+
+        // Multiply *a * *b, store in *c
+        // println!("*{} = *{} * *{} = {} * {} = {}", c, a, b, code[a], code[b], code[a] * code[b]);
+        code[c] = code[a] * code[b];
+
+        return 4;
+    }
+
+    let mut ip = 0;
+    loop {
+        let intcode = code[ip];
+        match intcode {
+            1 => {
+                ip += add(&mut code, ip);
+            },
+            2 => {
+                ip += mul(&mut code, ip);
+            },
+            99 => {
                 break;
             },
-	}
+            _ => {
+                println!("Unknown intcode: {}", intcode);
+                break;
+            },
+        }
     }
 
     return code[0];
@@ -51,11 +74,12 @@ fn part2(input: &str) {
         .map(|intcode| intcode.parse().unwrap())
         .collect();
 
-    for noun in 0..100 {
+    'outer: for noun in 0..100 {
         for verb in 0..100 {
             let res = sim(code.clone(), noun, verb);
             if res == 19690720 {
-                println!("Answer: {}, {}", noun, verb);
+                println!("Answer: {}", 100 * noun + verb);
+                break 'outer;
             }
         }
     }
