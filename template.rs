@@ -3,6 +3,8 @@ use std::env;
 use std::time::Instant;
 
 fn part1(input: &str) {
+    let mut input_buf = String::new();
+    let lines = read_lines(input, &mut input_buf, true).unwrap();
 }
 
 fn part2(input: &str) {
