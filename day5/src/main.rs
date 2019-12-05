@@ -129,43 +129,26 @@ fn sim(mut code: Vec<i32>) -> i32 {
         return ip+4;
     }
 
+    let opcode_functions: [&Fn(&mut Vec<i32>, usize, &str) -> usize; 8] = [
+    	&add, &mul, &input, &output, &jump_if_true, &jump_if_false, &less_than, &equal
+    ];
+
     let mut ip = 0;
     loop {
         let opcode_str = format!("{:0>2}", code[ip].to_string());
         let opcode: i32 = opcode_str[opcode_str.len()-2..].parse().unwrap();
         let parameter_modes = &opcode_str[..opcode_str.len()-2];
-        match opcode {
-            1 => {
-                ip = add(&mut code, ip, parameter_modes);
-            },
-            2 => {
-                ip = mul(&mut code, ip, parameter_modes);
-            },
-            3 => {
-                ip = input(&mut code, ip, parameter_modes);
-            },
-            4 => {
-                ip = output(&mut code, ip, parameter_modes);
-            },
-            5 => {
-                ip = jump_if_true(&mut code, ip, parameter_modes);
-            },
-            6 => {
-                ip = jump_if_false(&mut code, ip, parameter_modes);
-            },
-            7 => {
-                ip = less_than(&mut code, ip, parameter_modes);
-            },
-            8 => {
-                ip = equal(&mut code, ip, parameter_modes);
-            },
-            99 => {
-                break;
-            },
-            _ => {
-                println!("Unknown opcode: {}", opcode);
-                break;
-            },
+        let opcode_index = (opcode - 1) as usize;
+        if opcode_index < opcode_functions.len() {
+            ip = opcode_functions[opcode_index](&mut code, ip, parameter_modes);
+        } else {
+            match opcode {
+                99 => break,
+                _ => {
+                    println!("Invalid opcode: {}", opcode);
+                    break;
+                },
+            }
         }
     }
 
