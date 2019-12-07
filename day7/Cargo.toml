@@ -1,0 +1,10 @@
+[package]
+name = "day7"
+version = "0.1.0"
+authors = ["stbowers <sean.t.bowers@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+aoc_utils = { path = "../aoc_utils", features=["text_utils", "file_utils"] }
