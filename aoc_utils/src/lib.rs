@@ -4,6 +4,8 @@ pub mod file_utils;
 #[cfg(feature = "text_utils")]
 pub mod text_utils;
 
+pub mod intcode;
+
 pub mod prelude;
 
 #[cfg(test)]
