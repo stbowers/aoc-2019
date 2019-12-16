@@ -1,0 +1,22 @@
+
+type OperationFn = Fn(&mut IntcodeVM);
+
+struct IntcodeVM {
+    ip: usize,
+    memory: Vec<i32>,
+}
+
+impl IntcodeVM {
+    pub fn new(code: Vec<i32>) -> IntcodeVM {
+    };
+
+    fn add(&mut self) {
+        let opcode = self.memory[self.ip]
+        let a = self.memory[self.ip + 1];
+        let b = self.memory[self.ip + 1];
+        let c = self.memory[self.ip + 1];
+        let mode_a = self.memory[self.ip]
+
+        self.ip += 4;
+    }
+}
